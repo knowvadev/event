@@ -126,7 +126,7 @@ export interface Image {
     type: ImageType;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -174,6 +174,14 @@ export interface EventSettings {
     invoice_tax_details?: string;
     invoice_notes?: string;
     invoice_payment_terms_days?: number;
+    // Ticket design settings
+    ticket_design_settings?: {
+        accent_color?: string;
+        logo_image_id?: IdParam;
+        footer_text?: string;
+        layout_type?: 'default' | 'modern';
+        enabled?: boolean;
+    };
 }
 
 export interface VenueAddress {
@@ -844,4 +852,77 @@ export interface WebhookLog {
     response_body?: string;
     event_type: string;
     created_at: string;
+}
+
+// Email Template Types
+export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket';
+export type EmailTemplateEngine = 'liquid' | 'blade';
+
+export interface EmailTemplate {
+    id: number;
+    account_id: number;
+    organizer_id?: number;
+    event_id?: number;
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+    engine: EmailTemplateEngine;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface EmailTemplateToken {
+    token: string;
+    description: string;
+    example: string;
+}
+
+export interface CreateEmailTemplateRequest {
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
+
+export interface UpdateEmailTemplateRequest {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+    is_active?: boolean;
+}
+
+export interface PreviewEmailTemplateRequest {
+    template_type: EmailTemplateType;
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
+}
+
+export interface EmailTemplatePreview {
+    subject: string;
+    body: string;
+    context: Record<string, any>;
+}
+
+export interface DefaultEmailTemplate {
+    subject: string;
+    body: string;
+    cta?: {
+        label: string;
+        url_token: string;
+    };
 }
